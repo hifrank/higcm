@@ -45,7 +45,7 @@ opts = {
   :collapse_key => "test"
   :data         => { :mesg => "hello GCM" }
 }
-sender.send(registration_ids, opts)
+sender.send(registration_ids, opts, handler)
 ```
 
 ## send a muti-messages in parallel way 
