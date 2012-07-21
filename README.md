@@ -7,7 +7,7 @@ use [Typhoeus](http://typhoeus.github.com/) as http client so it is able to send
 
 ## handler
 parse gcm response with GCM::Handler according to [GCM Response format](http://developer.android.com/guide/google/gcm/gcm.html#response), 
-into serveral kinds of responses, say, success, fails, retry, unregister, you can only handle events you care about.
+into serveral kinds of events, say, success, fails, retry, unregister, you can only handle events you care about.
 
 # Usage
 
