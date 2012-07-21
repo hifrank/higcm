@@ -1,8 +1,11 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe GCM::Sender do
-  it "send muticast request to google gcm" do
-    @raw_gcm_response = File.read("#{File.dirname(__FILE__)}/../../fixtures/gcm_response.json")
+
+  before(:each) do
+    @api_key = 'foo'
+    @registration_ids = [1, 2, 3, 4, 5, 6]
+    @raw_gcm_response = File.read("#{File.dirname(__FILE__)}/../../fixtures/gcm_response_200.json")
     @retry_after = 10
     @stub_gcm_response = Typhoeus::Response.new(
       :code    => 200,
@@ -10,54 +13,65 @@ describe GCM::Sender do
       :body    =>  @raw_gcm_response,
       :time    => 0.1
     )
+    @sender = GCM::Sender.new(@api_key)
 
-    sender       = GCM::Sender.new(ENV['GCM_API_KEY'])
-    sender.hydra = Typhoeus::Hydra.hydra
-    sender.hydra.stub(:post, 'https://android.googleapis.com/gcm/send').and_return(@stub_gcm_response)
+  end
 
-    _fails   = 0
-    _success = 0
-    _renew   = 0
-    _retry   = 0
-
-    _updated_token = { 5 => "32"}
-
-    handler = GCM::Handler.new
-    handler.do_success do | succes_ids, response |
-      @success_ids      = succes_ids
-      @success_response = response   
-    end
-    handler.do_retry do | retry_ids, opts, response |
-      @retry_ids      = retry_ids
-      @retry_opts     = opts
-      @retry_response = response
-    end
-    handler.do_fail do | fail_ids, response |
-      @fail_ids      = fail_ids
-      @fail_response = response
-    end
-    handler.do_renew_token do | renew_ids, response |
-      @renew_ids      = renew_ids
-      @renew_response = response
+  describe "#initialize" do
+    it "should raise exception when api_key does not given when init" do
+      expect { sender = GCM::Sender.new }.to raise_error
     end
 
-    registration_ids = [1, 2, 3, 4, 5, 6]
-    sender.send_async(registration_ids, {}, handler)
-    sender.send_async_run
+    it "should raise exception when given api_key is nil or empty" do
+      expect { sender = GCM::Sender.new ""}.to raise_error
+      expect { sender = GCM::Sender.new nil}.to raise_error
+    end
 
-    @fail_ids.should == { 2 => "Unavailable, retry after #{@retry_after}", 3 => "InvalidRegistration", 6 => "NotRegistered" } 
-    @fail_response.is_a?(Typhoeus::Response).should == true
+    it "should raise exception when given api_key is nil or empty" do
+      sender  = GCM::Sender.new(@api_key)
+      sender.is_a?(GCM::Sender).should == true
+      sender.api_key.should            == @api_key
+    end
+  end
 
-    @retry_ids.should  == { 2 => 10 } 
-    @retry_opts.should == {} 
-    @retry_response.is_a?(Typhoeus::Response).should == true
+  describe "#send_async" do
+    before(:each) do
+      @sender.hydra = Typhoeus::Hydra.new
+      @sender.hydra.stub(:post, 'https://android.googleapis.com/gcm/send').and_return(@stub_gcm_response)
+    end
 
-    @renew_ids.should == { 5 => "32" } 
-    @renew_response.is_a?(Typhoeus::Response).should == true
+    it "should call handler.handle after request is completed" do
+      handler = double(GCM::Handler)
+      handler.should_receive(:handle).with(@registration_ids, {}, @stub_gcm_response)
+      @sender.send_async(@registration_ids, {}, handler)
+      @sender.send_async_run
+    end
 
-    @success_ids.should == { 1 => "1:0408", 4 => "1:1516", 5 => "1:2342" } 
-    @success_response.is_a?(Typhoeus::Response).should == true
+    it "should raise exception if opts[:collapse_key] is not String, empty string is acceptable" do
+      expect { @sender.send_async(@registration_ids, {:collapse_key => nil }, GCM::Handler.new) }.to raise_error(GCM::SenderError)
+      expect { @sender.send_async(@registration_ids, {:collapse_key => "" }, GCM::Handler.new) }.not_to raise_error(GCM::SenderError)
+    end
 
+    it "should raise exception if opts[:data] is not Hash, empty hash is acceptable" do
+      expect { @sender.send_async(@registration_ids, {:data => [] }, GCM::Handler.new) }.to raise_error(GCM::SenderError)
+      expect { @sender.send_async(@registration_ids, {:data => {} }, GCM::Handler.new) }.not_to raise_error(GCM::SenderError)
+    end
+
+    it "should raise exception if opts[:delay_while_idle] && opts[:time_to_live] is not Fixnum" do
+      expect { @sender.send_async(@registration_ids, {:delay_while_idle => [] }, GCM::Handler.new) }.to raise_error(GCM::SenderError)
+      expect { @sender.send_async(@registration_ids, {:delay_while_idle => 1 }, GCM::Handler.new) }.not_to raise_error(GCM::SenderError)
+      expect { @sender.send_async(@registration_ids, {:time_to_live => [] }, GCM::Handler.new) }.to raise_error(GCM::SenderError)
+      expect { @sender.send_async(@registration_ids, {:time_to_live => 1 }, GCM::Handler.new) }.not_to raise_error(GCM::SenderError)
+    end
+  end
+
+  describe "#send_async_run" do
+    it "should run Typhoeus::Hydra when send requests" do
+      hydra  = double(Typhoeus::Hydra)
+      @sender.hydra = hydra
+      hydra.should_receive(:run).once
+      @sender.send_async_run
+    end
   end
 
 end

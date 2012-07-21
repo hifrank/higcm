@@ -2,9 +2,6 @@ require 'json'
 
 module GCM
 
-  class NetConnectNotAllowedError < StandardError
-  end
-
   class Handler
 
     attr_accessor :retry_conditions

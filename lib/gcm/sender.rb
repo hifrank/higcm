@@ -1,9 +1,11 @@
 require 'typhoeus'
 
 module GCM
-    class Sender
 
-      attr_accessor :api_key, :api_status, :handlers, :hydra, :requests
+    class SenderError < StandardError; end
+
+    class Sender
+      attr_accessor :api_key, :api_status, :hydra, :requests
 
       OPTIONAL_OPTIONS = {
         :collapse_key     => String, 
@@ -14,7 +16,7 @@ module GCM
 
       def initialize(api_key)
         @api_key  = api_key
-        @handlers = []
+        raise SenderError.new("api_key is necessary for #{self.class}") if api_key.nil? || api_key.empty?
       end
 
       #http://developer.android.com/guide/google/gcm/gcm.html#server
@@ -32,7 +34,7 @@ module GCM
         #fill up option
         OPTIONAL_OPTIONS.each do | key, type |
           if opts.key?(key)
-            raise "#{key} should be Type #{type}" unless opts[key].is_a?(type)
+            raise SenderError.new("#{key} should be Type #{type}") unless opts[key].is_a?(type)
             body[key] = opts[key]
           end
         end
