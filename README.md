@@ -12,7 +12,7 @@ into serveral kinds of responses, say, success, fails, retry, unregister, you ca
 # Usage
 
 ## send a message
-<pre>
+```ruby
 sender = HiGCM::Sender.new(your_api_key)
 registration_ids = [1, 2, 3]
 opts = {
@@ -21,10 +21,10 @@ opts = {
 }
 response = sender.send(registration_ids, opts)
 ...
-</pre>
+```
 
 ## send a message with handler
-<pre>
+```ruby
 # prepare handler for retry and unregister event
 handler = HiGCM::Handler.new
 handler.do_retry do | retry_ids, opts, response |
@@ -46,10 +46,10 @@ opts = {
   :data         => { :mesg => "hello GCM" }
 }
 sender.send(registration_ids, opts)
-</pre>
+```
 
 ## send a muti-messages in parallel way 
-<pre>
+```ruby
 sender  = HiGCM::Sender.new(your_api_key)
 
 # queue your messages first 
@@ -76,4 +76,4 @@ something.each do | registration_id, name |
 end
 # now fire
 sender.send_async_run
-</pre>
+```
