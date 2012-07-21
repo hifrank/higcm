@@ -1,6 +1,6 @@
 require 'json'
 
-module GCM
+module HiGCM
 
   class Handler
 

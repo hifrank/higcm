@@ -1,6 +1,6 @@
 require 'typhoeus'
 
-module GCM
+module HiGCM
 
     class SenderError < StandardError; end
 

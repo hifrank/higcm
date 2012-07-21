@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-describe GCM::Handler do
+describe HiGCM::Handler do
   it "#handle should handle various response in when response code is 500" do
   end
 
@@ -14,7 +14,7 @@ describe GCM::Handler do
       :time    => 0.1
     )
     @api_key     = 'foo'
-    sender       = GCM::Sender.new(@api_key)
+    sender       = HiGCM::Sender.new(@api_key)
     sender.hydra = Typhoeus::Hydra.hydra
     sender.hydra.stub(:post, 'https://android.googleapis.com/gcm/send').and_return(@stub_gcm_response)
 
@@ -25,7 +25,7 @@ describe GCM::Handler do
 
     _updated_token = { 5 => "32"}
 
-    handler = GCM::Handler.new
+    handler = HiGCM::Handler.new
     handler.do_success do | succes_ids, response |
       @success_ids      = succes_ids
       @success_response = response   
