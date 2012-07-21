@@ -3,11 +3,11 @@
 $:.unshift File.expand_path('../lib', __FILE__)
 
 Gem::Specification.new do |s|
-  s.name         = "hi-gcm"
+  s.name         = "higcm"
   s.version      = "0.0.1"
   s.authors      = ["hifrank"]
-  s.email        = "r7692118@gmail.com"
-  s.homepage     = "https://github.com/hifrank/hi-gcm"
+  s.email        = "frank_chen@htc.com"
+  s.homepage     = "https://github.com/hifrank/higcm"
   s.summary      = "ruby wrapper for GCM google cloud messaging."
   s.description  = %q{ruby wrapper for GCM google cloud messaging.}
   #s.extensions   = [""]
@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
                      'Gemfile',
                      'Gemfile.lock',
                      'Rakefile',
-                     'hi-gcm.gemspec'
+                     'higcm.gemspec'
                    ]
   s.platform     = Gem::Platform::RUBY
   s.require_path = 'lib'
