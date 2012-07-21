@@ -19,6 +19,12 @@ module HiGCM
         raise SenderError.new("api_key is necessary for #{self.class}") if api_key.nil? || api_key.empty?
       end
 
+      def send(registration_ids, opts={}, handler=nil)
+        request = send_async(registration_ids, opts, handler)
+        send_async_run
+        request.handled_response
+      end
+
       #http://developer.android.com/guide/google/gcm/gcm.html#server
       def send_async(registration_ids, opts={}, handler=nil)
 
@@ -41,9 +47,10 @@ module HiGCM
 
         request = Typhoeus::Request.new(
           'https://android.googleapis.com/gcm/send',
-          :headers => headers,
-          :method  => :post,
-          :body    => body.to_json
+          :headers         => headers,
+          :method          => :post,
+          :body            => body.to_json,
+          :follow_location => true
         )
 
         @hydra ||= Typhoeus::Hydra.new

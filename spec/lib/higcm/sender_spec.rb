@@ -14,7 +14,8 @@ describe HiGCM::Sender do
       :time    => 0.1
     )
     @sender = HiGCM::Sender.new(@api_key)
-
+    @sender.hydra = Typhoeus::Hydra.new
+    @sender.hydra.stub(:post, 'https://android.googleapis.com/gcm/send').and_return(@stub_gcm_response)
   end
 
   describe "#initialize" do
@@ -34,11 +35,20 @@ describe HiGCM::Sender do
     end
   end
 
-  describe "#send_async" do
-    before(:each) do
-      @sender.hydra = Typhoeus::Hydra.new
-      @sender.hydra.stub(:post, 'https://android.googleapis.com/gcm/send').and_return(@stub_gcm_response)
+  describe "#send" do
+    it "should return Typhoeus::Request" do
+      response = @sender.send_async(@registration_ids, {})
+      response.class.should == Typhoeus::Request
     end
+
+    it "should call handler.handle after request is completed" do
+      handler = double(HiGCM::Handler)
+      handler.should_receive(:handle).with(@registration_ids, {}, @stub_gcm_response)
+      @sender.send(@registration_ids, {}, handler)
+    end
+  end
+
+  describe "#send_async" do
 
     it "should call handler.handle after request is completed" do
       handler = double(HiGCM::Handler)
