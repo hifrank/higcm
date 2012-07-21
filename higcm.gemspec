@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.version      = "0.0.1"
   s.authors      = ["hifrank"]
   s.email        = "frank_chen@htc.com"
-  s.homepage     = "https://github.com/hifrank/higcm"
+  s.homepage     = "https://github.com/hifrank/gcm"
   s.summary      = "ruby wrapper for GCM google cloud messaging."
   s.description  = %q{ruby wrapper for GCM google cloud messaging.}
   #s.extensions   = [""]
