@@ -1,4 +1,4 @@
-GCM Ruby wrapper  [![Build Status](https://secure.travis-ci.org/hifrank/gcm.png?branch=master)](http://travis-ci.org/hifrank/gcm)
+GCM Ruby wrapper  [![Build Status](https://secure.travis-ci.org/hifrank/higcm.png?branch=master)](http://travis-ci.org/hifrank/higcm)
 ===
 This is Ruby libray for push message to device via [Google Cloud Messaging for Android](http://developer.android.com/guide/google/gcm/index.html)
 # Features
