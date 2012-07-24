@@ -4,7 +4,7 @@ $:.unshift File.expand_path('../lib', __FILE__)
 
 Gem::Specification.new do |s|
   s.name         = "higcm"
-  s.version      = "0.0.1"
+  s.version      = "0.0.2"
   s.authors      = ["hifrank"]
   s.email        = "frank_chen@htc.com"
   s.homepage     = "https://github.com/hifrank/higcm"
