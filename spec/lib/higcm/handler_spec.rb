@@ -13,7 +13,7 @@ describe HiGCM::Handler do
   end
 
   describe "#handle" do
-    it "#handle should handle various response in when response code is 500" do
+    pending "#handle should handle various response in when response code is 500" do
     end
 
     it "#handle should handle various response when response code is 200" do
@@ -65,20 +65,20 @@ describe HiGCM::Handler do
       sender.send_async_run
 
       @fail_ids.should == { 2 => "Unavailable, retry after #{@retry_after}", 3 => "InvalidRegistration", 6 => "NotRegistered" }
-      @fail_response.is_a?(Typhoeus::Response).should == true
+      @fail_response.should be_a(Typhoeus::Response)
 
       @retry_ids.should  == { 2 => 10 }
       @retry_opts.should == {}
-      @retry_response.is_a?(Typhoeus::Response).should == true
+      @retry_response.should be_a(Typhoeus::Response)
 
       @renew_ids.should == { 5 => "32" }
-      @renew_response.is_a?(Typhoeus::Response).should == true
+      @renew_response.should be_a(Typhoeus::Response)
 
       @success_ids.should == { 1 => "1:0408", 4 => "1:1516", 5 => "1:2342" }
-      @success_response.is_a?(Typhoeus::Response).should == true
+      @success_response.should be_a(Typhoeus::Response)
 
       @unreg_ids.should == { 3 => "InvalidRegistration", 6 => "NotRegistered" }
-      @unreg_response.is_a?(Typhoeus::Response).should == true
+      @unreg_response.should be_a(Typhoeus::Response)
 
     end
   end
