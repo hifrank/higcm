@@ -28,17 +28,17 @@ describe HiGCM::Sender do
       expect { sender = HiGCM::Sender.new nil}.to raise_error
     end
 
-    it "should raise exception when given api_key is nil or empty" do
+    it "should accept correct API key" do
       sender  = HiGCM::Sender.new(@api_key)
-      sender.is_a?(HiGCM::Sender).should == true
-      sender.api_key.should            == @api_key
+      sender.should be_a(HiGCM::Sender)
+      sender.api_key.should == @api_key
     end
   end
 
   describe "#send" do
     it "should return Typhoeus::Request" do
       response = @sender.send_async(@registration_ids, {})
-      response.class.should == Typhoeus::Request
+      response.should be_a(Typhoeus::Request)
     end
 
     it "should call handler.handle after request is completed" do
