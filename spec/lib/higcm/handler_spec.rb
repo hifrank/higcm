@@ -13,7 +13,7 @@ describe HiGCM::Handler do
   end
 
   describe "#handle" do
-    it "#handle should handle various response in when response code is 500" do
+    pending "#handle should handle various response in when response code is 500" do
     end
 
     it "#handle should handle various response when response code is 200" do
