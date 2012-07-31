@@ -1,5 +1,16 @@
 CHANGLOG
 
+** 0.0.3
+
+*** feature
+
+1. return Typhoeus::Response when send instead of Typhoeus::Resquest
+
+*** bug fixing
+
+1. init a handler object if hanlder is not init when sending.
+
+
 ** 0.0.2
 
 *** feature

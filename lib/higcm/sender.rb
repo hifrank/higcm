@@ -20,6 +20,7 @@ module HiGCM
       end
 
       def send(registration_ids, opts={}, handler=nil)
+        handler = HiGCM::Handler.new if handler.nil?
         request = send_async(registration_ids, opts, handler)
         send_async_run
         request.handled_response

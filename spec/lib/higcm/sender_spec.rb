@@ -36,9 +36,9 @@ describe HiGCM::Sender do
   end
 
   describe "#send" do
-    it "should return Typhoeus::Request" do
-      response = @sender.send_async(@registration_ids, {})
-      response.should be_a(Typhoeus::Request)
+    it "should return Typhoeus::Response" do
+      response = @sender.send(@registration_ids, {})
+      response.should be_a(Typhoeus::Response)
     end
 
     it "should call handler.handle after request is completed" do
