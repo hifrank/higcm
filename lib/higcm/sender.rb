@@ -53,6 +53,11 @@ module HiGCM
             else
               raise SenderError.new("#{key} should be Type #{type}") unless opts[key].is_a?(type)
             end
+            # convert payload data to String for issue #3
+            case key
+            when :data
+              opts[key] = convert_hash(opts[key])
+            end
             body[key] = opts[key]
           end
         end
@@ -79,6 +84,20 @@ module HiGCM
       def send_async_run
         # handle response according to http://developer.android.com/guide/google/gcm/gcm.html#response
         @hydra.run
+      end
+
+      def convert_hash(hash)
+        hash.each do | k, v |
+          if v.is_a?(Hash)
+            hash[k] = convert_hash(v)
+          else
+            if v.respond_to?(:to_s)
+              hash[k] = v.to_s
+            else
+              raise SenderError "data value must respond to to_s function for converting to String"
+            end
+          end
+        end
       end
 
     end

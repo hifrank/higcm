@@ -67,11 +67,43 @@ describe HiGCM::Sender do
       expect { @sender.send_async(@registration_ids, {:data => {} }, HiGCM::Handler.new) }.not_to raise_error(HiGCM::SenderError)
     end
 
+    it "should convert all opts[:data] to String" do
+      test_value = 1
+      rs = JSON.parse(@sender.send_async(@registration_ids, {:data => {:name => test_value} }, HiGCM::Handler.new).body)
+      rs["data"]["name"].should == "1"
+    end
+
     it "should raise exception if opts[:delay_while_idle] && opts[:time_to_live] is not Fixnum" do
       expect { @sender.send_async(@registration_ids, {:delay_while_idle => [] }, HiGCM::Handler.new) }.to raise_error(HiGCM::SenderError)
       expect { @sender.send_async(@registration_ids, {:delay_while_idle => true }, HiGCM::Handler.new) }.not_to raise_error(HiGCM::SenderError)
       expect { @sender.send_async(@registration_ids, {:time_to_live => [] }, HiGCM::Handler.new) }.to raise_error(HiGCM::SenderError)
       expect { @sender.send_async(@registration_ids, {:time_to_live => 1 }, HiGCM::Handler.new) }.not_to raise_error(HiGCM::SenderError)
+    end
+  end
+
+  describe "#convert_hash" do
+    it "should convert all the Hash value to String according to to_s function" do
+      sample = {
+        :name => 'frank',
+        :age  => 32,
+        :setting => {
+          'gundam' => true,
+          'style'  => {
+            :color => 1
+          }
+        }
+      }
+      expected_sample = {
+        :name => 'frank',
+        :age  => 32.to_s,
+        :setting => {
+          'gundam' => true.to_s,
+          'style'  => {
+            :color => 1.to_s
+          }
+        }
+      }
+      @sender.convert_hash(sample).should == expected_sample
     end
   end
 
