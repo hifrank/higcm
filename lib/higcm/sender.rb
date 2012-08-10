@@ -10,7 +10,7 @@ module HiGCM
       OPTIONAL_OPTIONS = {
         :collapse_key     => String, 
         :data             => Hash, 
-        :delay_while_idle => Fixnum, 
+        :delay_while_idle => Boolean, 
         :time_to_live     => Fixnum
       }
 
