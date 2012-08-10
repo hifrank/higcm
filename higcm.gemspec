@@ -4,9 +4,9 @@ $:.unshift File.expand_path('../lib', __FILE__)
 
 Gem::Specification.new do |s|
   s.name         = "higcm"
-  s.version      = "0.0.3"
+  s.version      = "0.0.4"
   s.authors      = ["hifrank"]
-  s.email        = "frank_chen@htc.com"
+  s.email        = "r7692118@gmail.com"
   s.homepage     = "https://github.com/hifrank/higcm"
   s.summary      = "ruby wrapper for GCM google cloud messaging."
   s.description  = %q{ruby wrapper for GCM google cloud messaging.}

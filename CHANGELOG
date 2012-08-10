@@ -1,5 +1,15 @@
 CHANGLOG
 
+** 0.0.4
+
+*** feature
+
+1. convert data payload to String value [issue #3](https://github.com/hifrank/higcm/issues/3) 
+
+*** bug fixing
+
+1. change delay_while_idle to allow while list true, false, [issue #2](https://github.com/hifrank/higcm/issues/2)
+
 ** 0.0.3
 
 *** feature
