@@ -69,7 +69,7 @@ describe HiGCM::Sender do
 
     it "should raise exception if opts[:delay_while_idle] && opts[:time_to_live] is not Fixnum" do
       expect { @sender.send_async(@registration_ids, {:delay_while_idle => [] }, HiGCM::Handler.new) }.to raise_error(HiGCM::SenderError)
-      expect { @sender.send_async(@registration_ids, {:delay_while_idle => 1 }, HiGCM::Handler.new) }.not_to raise_error(HiGCM::SenderError)
+      expect { @sender.send_async(@registration_ids, {:delay_while_idle => true }, HiGCM::Handler.new) }.not_to raise_error(HiGCM::SenderError)
       expect { @sender.send_async(@registration_ids, {:time_to_live => [] }, HiGCM::Handler.new) }.to raise_error(HiGCM::SenderError)
       expect { @sender.send_async(@registration_ids, {:time_to_live => 1 }, HiGCM::Handler.new) }.not_to raise_error(HiGCM::SenderError)
     end

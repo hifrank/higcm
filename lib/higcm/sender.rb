@@ -8,9 +8,9 @@ module HiGCM
       attr_accessor :api_key, :api_status, :hydra, :requests
 
       OPTIONAL_OPTIONS = {
-        :collapse_key     => String, 
-        :data             => Hash, 
-        :delay_while_idle => Boolean, 
+        :collapse_key     => String,
+        :data             => Hash,
+        :delay_while_idle => [true, false],
         :time_to_live     => Fixnum
       }
 
@@ -41,7 +41,18 @@ module HiGCM
         #fill up option
         OPTIONAL_OPTIONS.each do | key, type |
           if opts.key?(key)
-            raise SenderError.new("#{key} should be Type #{type}") unless opts[key].is_a?(type)
+            if type.is_a?(Array)
+              @valid_value = false
+              type.each do | v |
+                if opts[key] == v
+                  @valid_value = true
+                  break
+                end
+              end
+              raise SenderError.new("#{key} should be Type #{type}") unless @valid_value
+            else
+              raise SenderError.new("#{key} should be Type #{type}") unless opts[key].is_a?(type)
+            end
             body[key] = opts[key]
           end
         end
