@@ -1,5 +1,10 @@
 CHANGLOG
 ===
+# 0.0.5
+## bug fixing
+
+1. fix bug that on_complete should return response object. 
+
 # 0.0.4
 
 ## feature

@@ -74,6 +74,7 @@ module HiGCM
 
         request.on_complete do | response |
           handler.handle(registration_ids, opts, response)
+          response
         end
 
         @hydra.queue(request)
