@@ -17,7 +17,7 @@ sender = HiGCM::Sender.new(your_api_key)
 registration_ids = [1, 2, 3]
 opts = {
   :collapse_key => "test"
-  :data         => { :mesg => "hello GCM" }
+  :data         => { :message => "hello GCM" }
 }
 response = sender.send(registration_ids, opts)
 ...
